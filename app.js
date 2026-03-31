@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const Listing = require("./models/listing.js");
 const path= require("path");
 const methodOverride = require("method-override");
+const ejsMate = require("ejs-mate");
 
 const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
 
@@ -22,6 +23,8 @@ app.set("view engine","ejs");
 app.set("views",path.join(__dirname,"views"));
 app.use(express.urlencoded({extended:true}));
 app.use(methodOverride("_method"));
+app.engine('ejs',ejsMate);
+app.use(express.static(path.join(__dirname,"/public")));  //it is written to use static files of public folder
 
 app.get("/",(req,res)=>{
     res.send("Hi, I am root");
@@ -72,7 +75,11 @@ app.get("/listings/:id/edit",async (req,res)=>{
 //edit route
 app.put("/listings/:id",async (req,res)=>{
     let {id} = req.params;
+    if (req.body.listing.image && req.body.listing.image.url === "") {
+        req.body.listing.image.url = "https://plus.unsplash.com/premium_photo-1711305682256-3b1874c923bd?w=1000&auto=format&fit=crop&q=60";
+    }
     await Listing.findByIdAndUpdate(id,{...req.body.listing});
+    
     res.redirect(`/listings/${id}`);
 })
 //delete route
