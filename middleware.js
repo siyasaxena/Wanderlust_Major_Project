@@ -1,6 +1,7 @@
 const Listing = require("./models/listing");
+const Review = require("./models/review");
 const {listingSchema} = require("./schema.js");
-const {reviewSchema} = require("../schema.js");
+const {reviewSchema} = require("./schema.js");
 const ExpressError = require("./utils/ExpressError.js");
 
 module.exports.isLoggedIn = (req,res,next)=>{
@@ -20,14 +21,18 @@ module.exports.saveRedirectUrl = (req,res,next)=>{
     next();
 }
 module.exports.isOwner = async(req,res,next)=>{
-    if(!req.body.listing){
-        throw new ExpressError(404,"Send valid data for listing");
-    }
+    // if(!req.body.listing){
+    //     throw new ExpressError(404,"Send valid data for listing");
+    // }
     let {id} = req.params;
-    if (req.body.listing.image && req.body.listing.image.url === "") {
-        req.body.listing.image.url = "https://plus.unsplash.com/premium_photo-1711305682256-3b1874c923bd?w=1000&auto=format&fit=crop&q=60";
-    }
+    // if (req.body.listing.image && req.body.listing.image.url === "") {
+    //     req.body.listing.image.url = "https://plus.unsplash.com/premium_photo-1711305682256-3b1874c923bd?w=1000&auto=format&fit=crop&q=60";
+    // }
     let listing = await Listing.findById(id);
+    if (!listing) {
+        req.flash("error", "Listing not found");
+        return res.redirect("/listings");
+    }
     if(!listing.owner._id.equals(res.locals.currUser._id)){
         req.flash("error","You can't edit");
         return res.redirect(`/listings/${id}`);
@@ -56,3 +61,13 @@ module.exports.validateReview = (req,res,next)=>{
         next();
     }
 }
+
+module.exports.isReviewAuthor = async(req,res,next)=>{
+    let {id,reviewId} = req.params;
+    let review = await Review.findById(reviewId);
+    if(!review.author._id.equals(res.locals.currUser._id)){
+        req.flash("error","You are not the author of this review");
+        return res.redirect(`/listings/${id}`);
+    }
+    next();
+};
