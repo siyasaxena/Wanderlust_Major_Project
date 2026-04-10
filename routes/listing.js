@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const wrapAsync = require("../utils/wrapAsync.js");
-const {listingSchema} = require("../schema.js");
-const ExpressError = require("../utils/ExpressError.js");
 const Listing = require("../models/listing.js");
 const {isLoggedIn, isOwner,validateListing} = require("../middleware.js");
 const ListingController = require("../controllers/listings.js");
+const multer = require('multer')
+const upload = multer({dest: 'uploads/'})
 
 // app.get("/testListing",async (req,res)=>{
 //     let sampleListing = new Listing({
@@ -22,7 +22,8 @@ const ListingController = require("../controllers/listings.js");
 
 router.route("/")
 .get(wrapAsync(ListingController.index))
-.post(isLoggedIn,validateListing,wrapAsync(ListingController.createListing ));
+//.post(isLoggedIn,validateListing,wrapAsync(ListingController.createListing ));
+.post(isLoggedIn, upload.single('listing[image]'),validateListing, wrapAsync(ListingController.createListing))
 
 //index route
 // router.get("/",wrapAsync(async (req,res)=>{
