@@ -5,7 +5,9 @@ const Listing = require("../models/listing.js");
 const {isLoggedIn, isOwner,validateListing} = require("../middleware.js");
 const ListingController = require("../controllers/listings.js");
 const multer = require('multer')
-const upload = multer({dest: 'uploads/'})
+const {storage} = require("../cloudConfig.js");
+const upload = multer({storage});
+
 
 // app.get("/testListing",async (req,res)=>{
 //     let sampleListing = new Listing({
@@ -22,8 +24,7 @@ const upload = multer({dest: 'uploads/'})
 
 router.route("/")
 .get(wrapAsync(ListingController.index))
-//.post(isLoggedIn,validateListing,wrapAsync(ListingController.createListing ));
-.post(isLoggedIn, upload.single('listing[image]'),validateListing, wrapAsync(ListingController.createListing))
+.post(isLoggedIn,validateListing, upload.single("listing[image]") , wrapAsync(ListingController.createListing ));
 
 //index route
 // router.get("/",wrapAsync(async (req,res)=>{
@@ -37,7 +38,7 @@ router.get("/new",isLoggedIn,ListingController.renderNewForm);
 
 router.route("/:id")
 .get(wrapAsync(ListingController.showListings))
-.put(isLoggedIn,isOwner,validateListing,wrapAsync(ListingController.updateListing))
+.put(isLoggedIn,isOwner,upload.single("listing[image]"),validateListing,wrapAsync(ListingController.updateListing))
 .delete(isLoggedIn,isOwner,wrapAsync(ListingController.destroyListing));
 //show route
 // router.get("/:id",wrapAsync(ListingController.showListings));
