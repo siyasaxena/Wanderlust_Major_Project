@@ -5,24 +5,37 @@ maptilerClient.config.apiKey = process.env.MAP_TOKEN;
 
 module.exports.index = async (req, res) => {
   try {
+    let { search, sort } = req.query; // दोनों query parameters को एक साथ निकाला
+    let filterQuery = {}; // डिफ़ॉल्ट खाली ऑब्जेक्ट (यानी सब कुछ ढूंढो)
     let sortOption = {};
-    const sortParam = req.query.sort; // URL से ?sort=asc या ?sort=desc रीड करेगा
 
-    if (sortParam === "desc") {
-      sortOption = { price: -1 }; // High to Low (Descending)
-    } else if (sortParam === "asc") {
-      sortOption = { price: 1 }; // Low to High (Ascending)
-    } else {
-      sortOption = {}; // Default (बिना किसी शार्टिंग के जैसे पहले आ रहा था)
+    // 1. Search Logic: सिर्फ फ़िल्टर ऑब्जेक्ट तैयार करें
+    if (search && search.trim().length > 0) {
+      filterQuery = {
+        $or: [
+          { title: { $regex: search, $options: "i" } },
+          { location: { $regex: search, $options: "i" } },
+          { country: { $regex: search, $options: "i" } },
+        ],
+      };
     }
 
-    // Mongoose schema के ऊपर .sort() अप्लाई किया
-    const allListings = await Listing.find({}).sort(sortOption);
+    // 2. Sorting Logic: अगर यूजर ने High to Low या Low to High चुना है
+    if (sort === "desc") {
+      sortOption = { price: -1 }; // High to Low
+    } else if (sort === "asc") {
+      sortOption = { price: 1 }; // Low to High
+    }
 
-    // वर्तमान सॉर्टिंग की वैल्यू (currentSort) को भी EJS में भेज रहे हैं
+    console.log("Generated Filter Query:", JSON.stringify(filterQuery));
+    // 3. Database Query: filterQuery और sortOption दोनों को एक साथ अप्लाई किया
+    const allListings = await Listing.find(filterQuery).sort(sortOption);
+
+    // 4. Render Response: डेटा को EJS पर भेजें
     res.render("listings/index.ejs", {
       allListings,
-      currentSort: sortParam || "",
+      currentSort: sort || "",
+      currentSearch: search || "",
     });
   } catch (err) {
     console.error(err);
@@ -84,7 +97,7 @@ module.exports.renderEditForm = async (req, res) => {
   let originalImageUrl = listing.image.url;
   originalImageUrl = originalImageUrl.replace(
     "/upload",
-    "/upload/h_300,w_250/e_blur:100",
+    "/upload/h_300,w_250/e_blur:80",
   );
   res.render("listings/edit.ejs", { listing, originalImageUrl });
 };

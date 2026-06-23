@@ -50,6 +50,9 @@
     cursor: pointer;
     gap: 8px;
 }
+.tax-info {
+    display: none;
+}
 
     
 </style>
@@ -127,7 +130,7 @@
                     <a class="dropdown-item <%= currentSort === 'desc' ? 'active' : '' %>" href="/listings?sort=desc">
                         <i class="fa-solid fa-arrow-down-wide-short me-2"></i> Max price to Min price
                     </a>
-                    <% if (currentSort) { %>
+                    <% if (currentSort || currentSearch) { %>
                         <li><hr class="dropdown-divider"></li>
                         <a class="dropdown-item text-danger" href="/listings">
                             <i class="fa-solid fa-xmark me-2"></i> Clear Filter
@@ -136,7 +139,6 @@
                 </div>
             </div>
         </div>
-
         <div class="tax-toggle">
             <div class="form-check-reverse form-switch">
                 <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
@@ -144,35 +146,40 @@
             </div>
         </div>
     </div>
-
-    
 </div>
 
-
-<div class="row row-cols-sm-1 row-cols-md-3 mt-4 ">
-    <% for(let listing of allListings){ %>
-        <div class="col">
-            <a href="/listings/<%= listing._id%>" class="listing-link">
-            <div class="card col listing-card" style="width: 20rem;">
-                <img 
-                    src="<%= (listing.image && listing.image.url) ? listing.image.url : 'https://plus.unsplash.com/premium_photo-1711305682256-3b1874c923bd?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw3Mnx8fGVufDB8fHx8fA%3D%3D' %>" 
-                    class="card-img-top" 
-                    alt="listing_image" 
-                    style="height:20rem;"/>
-                    <div class="card-img-overlay"></div>
-                <div class="card-body">
-                    <p class="card-text">
-                        <%= listing.title %><br>
-                        &#8377; <%= listing.price.toLocaleString("en-IN") %> / night
-                        <i class="tax-info">
-                            &nbsp; &nbsp; +<%= listing.gst || 18 %>% GST</i>
-                    </p>
+<% if (allListings.length === 0) { %>
+    <div class="alert alert-danger col-md-6 offset-md-3 text-center mt-5" role="alert">
+        <i class="fa-solid fa-triangle-exclamation"></i> No listings found matching "<b><%= currentSearch %></b>". Try looking for something else!
+        <br>
+        <a href="/listings" class="btn btn-sm btn-outline-danger mt-3">View All Listings</a>
+    </div>
+<% } else { %>
+    <div class="row row-cols-sm-1 row-cols-md-3 mt-4 ">
+        <% for(let listing of allListings){ %>
+            <div class="col">
+                <a href="/listings/<%= listing._id%>" class="listing-link">
+                <div class="card col listing-card" style="width: 20rem;">
+                    <img 
+                        src="<%= (listing.image && listing.image.url) ? listing.image.url : 'https://plus.unsplash.com/premium_photo-1711305682256-3b1874c923bd?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw3Mnx8fGVufDB8fHx8fA%3D%3D' %>" 
+                        class="card-img-top" 
+                        alt="listing_image" 
+                        style="height:20rem;"/>
+                        <div class="card-img-overlay"></div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            <%= listing.title %><br>
+                            &#8377; <%= listing.price.toLocaleString("en-IN") %> / night
+                            <i class="tax-info">
+                                &nbsp; &nbsp; +<%= listing.gst || 18 %>% GST</i>
+                        </p>
+                    </div>
                 </div>
+            </a>
             </div>
-        </a>
-        </div>
-    <%}%>
-</div>
+        <% } %>
+    </div>
+<% } %>
 
 <script>
     let taxSwitch = document.getElementById("switchCheckDefault");
