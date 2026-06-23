@@ -100,12 +100,13 @@ module.exports.updateListing = async (req, res) => {
     listing.geometry = response.features[0].geometry;
   }
 
-  if (typeof req.file) {
+  if (typeof req.file != "undefined") {
     let url = req.file.path;
     let filename = req.file.filename;
     listing.image = { filename, url };
-    await listing.save();
   }
+
+  await listing.save();
 
   req.flash("success", "Listing is updated");
   res.redirect(`/listings/${id}`);

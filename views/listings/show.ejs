@@ -12,11 +12,12 @@
     <div class="card col-6 offset-2 show-card listing-card">
         <img src="<%= listing.image.url %>" class="card-img-top show-img" alt="listing_image">
         <div class="card-body">
-            <p class="card-text">Owned By: <i><%= listing.owner?.username || "Anonymous" %></i></p>
-            <p class="card-text"><%= listing.description %></p>
-            <p class="card-text"> &#8377; <%= listing.price.toLocaleString("en-IN") %></p> 
-            <p class="card-text"><%= listing.location %></p>
-            <p class="card-text"><%= listing.country %></p>
+            <p class="card-text"><h6>Owned By: </h6><i><%= listing.owner?.username || "Anonymous" %></i></p>
+            <p class="card-text"><h6>Description -> </h6><%= listing.description %></p>
+            <p class="card-text"><h6>Price -> </h6> &#8377; <%= listing.price.toLocaleString("en-IN") %></p> 
+            <p class="card-text"><h6>Location -> </h6><%= listing.location %></p>
+            <p class="card-text"><h6>Country -> </h6><%= listing.country %></p>
+            <p class="card-text"><h6>GST -></h6><%= listing.gst %></p>
             
         </div>
     </div>

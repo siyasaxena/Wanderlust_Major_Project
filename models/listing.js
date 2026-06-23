@@ -46,10 +46,11 @@ const listingSchema = new Schema({
       type: [Number],
       required: true,
     },
-    GST: {
-      type: Number,
-      reuired: true,
-    },
+  },
+  gst: {
+    type: Number,
+    default: 18,
+    reuired: true,
   },
 });
 //post
