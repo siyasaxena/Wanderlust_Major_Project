@@ -2,12 +2,12 @@ const express = require("express");
 const router = express.Router();
 const wrapAsync = require("../utils/wrapAsync.js");
 const Listing = require("../models/listing.js");
-const {isLoggedIn, isOwner,validateListing} = require("../middleware.js");
-const ListingController = require("../controllers/listings.js");
-const multer = require('multer')
-const {storage} = require("../cloudConfig.js");
-const upload = multer({storage});
 
+const { isLoggedIn, isOwner, validateListing } = require("../middleware.js");
+const ListingController = require("../controllers/listings.js");
+const multer = require("multer");
+const { storage } = require("../cloudConfig.js");
+const upload = multer({ storage });
 
 // app.get("/testListing",async (req,res)=>{
 //     let sampleListing = new Listing({
@@ -22,9 +22,15 @@ const upload = multer({storage});
 //     res.send("successfull testing");
 // });
 
-router.route("/")
-.get(wrapAsync(ListingController.index))
-.post(isLoggedIn,validateListing, upload.single("listing[image]") , wrapAsync(ListingController.createListing ));
+router
+  .route("/")
+  .get(wrapAsync(ListingController.index))
+  .post(
+    isLoggedIn,
+    validateListing,
+    upload.single("listing[image]"),
+    wrapAsync(ListingController.createListing),
+  );
 
 //index route
 // router.get("/",wrapAsync(async (req,res)=>{
@@ -34,19 +40,31 @@ router.route("/")
 //router.get("/",wrapAsync(ListingController.index));
 
 //new route
-router.get("/new",isLoggedIn,ListingController.renderNewForm);
+router.get("/new", isLoggedIn, ListingController.renderNewForm);
 
-router.route("/:id")
-.get(wrapAsync(ListingController.showListings))
-.put(isLoggedIn,isOwner,upload.single("listing[image]"),validateListing,wrapAsync(ListingController.updateListing))
-.delete(isLoggedIn,isOwner,wrapAsync(ListingController.destroyListing));
+router
+  .route("/:id")
+  .get(wrapAsync(ListingController.showListings))
+  .put(
+    isLoggedIn,
+    isOwner,
+    upload.single("listing[image]"),
+    validateListing,
+    wrapAsync(ListingController.updateListing),
+  )
+  .delete(isLoggedIn, isOwner, wrapAsync(ListingController.destroyListing));
 //show route
 // router.get("/:id",wrapAsync(ListingController.showListings));
 //create route
 // router.post("/",isLoggedIn,validateListing,wrapAsync(ListingController.createListing ));
 
 //edit
-router.get("/:id/edit",isLoggedIn,isOwner,wrapAsync(ListingController.renderEditForm));
+router.get(
+  "/:id/edit",
+  isLoggedIn,
+  isOwner,
+  wrapAsync(ListingController.renderEditForm),
+);
 //update route
 // router.put("/:id",isLoggedIn,isOwner,validateListing,wrapAsync(ListingController.updateListing));
 //delete route

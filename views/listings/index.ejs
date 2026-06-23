@@ -1,5 +1,6 @@
-<% layout("/layouts/boilerplate") -%>
-<%= success %>
+<% layout("/layouts/boilerplate") -%> <%= success %> 
+<!-- flash msg ka key success hai        -->
+
 <!-- <h3>All Listings</h3> -->
 <!-- <form method="GET" action="/listings/new">
     <button>CREATE NEW Listings</button>
@@ -34,7 +35,7 @@
 }
 
 /* Clean up the fixed widths so they stay responsive */
-.filter-panel, .tax-toggle {
+.tax-toggle {
     border: 1px solid #b0b0b0;
     border-radius: 12px;
     height: 3.2rem;
@@ -114,8 +115,26 @@
 
     <div class="right-menu">
         <div class="filter-panel">
-            <div class="icon"><i class="fa-solid fa-sliders"></i></div>
-            <div>Filters</div>
+            <div class="dropdown">
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fa-solid fa-sliders me-2"></i> Filters
+                </button>
+        
+                <div class="dropdown-menu p-2" aria-labelledby="filterDropdown">
+                    <a class="dropdown-item <%= currentSort === 'asc' ? 'active' : '' %>" href="/listings?sort=asc">
+                        <i class="fa-solid fa-arrow-up-short-wide me-2"></i> Min price to Max price
+                    </a>
+                    <a class="dropdown-item <%= currentSort === 'desc' ? 'active' : '' %>" href="/listings?sort=desc">
+                        <i class="fa-solid fa-arrow-down-wide-short me-2"></i> Max price to Min price
+                    </a>
+                    <% if (currentSort) { %>
+                        <li><hr class="dropdown-divider"></li>
+                        <a class="dropdown-item text-danger" href="/listings">
+                            <i class="fa-solid fa-xmark me-2"></i> Clear Filter
+                        </a>
+                    <% } %>
+                </div>
+            </div>
         </div>
 
         <div class="tax-toggle">
@@ -145,7 +164,7 @@
                     <p class="card-text">
                         <%= listing.title %><br>
                         &#8377; <%= listing.price.toLocaleString("en-IN") %> / night
-                        <i class="tax-info"> &nbsp; &nbsp; +18% GST</i>
+                        <i class="tax-info"> &nbsp; &nbsp; +listing.GST% GST</i>
                     </p>
                 </div>
             </div>
