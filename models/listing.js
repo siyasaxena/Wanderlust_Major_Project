@@ -33,24 +33,42 @@ const listingSchema = new Schema({
     },
   ],
   owner: {
-    type: Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
   geometry: {
     type: {
       type: String,
       enum: ["Point"],
-      required: true,
+      required: false,
     },
     coordinates: {
       type: [Number],
-      required: true,
+      required: false,
     },
   },
   gst: {
     type: Number,
     default: 18,
     reuired: true,
+  },
+  category: {
+    type: String,
+    enum: [
+      "Trending",
+      "Tiny homes",
+      "Lakefront",
+      "Cabins",
+      "Beach",
+      "Amazing Pools",
+      "OMG!",
+      "Surfing",
+      "Iconic cities",
+      "Rooms",
+      "Farms",
+      "Camping",
+    ],
+    required: true,
   },
 });
 //post

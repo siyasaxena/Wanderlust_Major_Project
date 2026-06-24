@@ -120,17 +120,25 @@ body {
   height: 400px;
   width: 100%;
   border-radius: 10px;
+  overflow: visible !important;
 }
 
 /* Initial state: The marker container */
 .marker-container {
-  font-size: 32px; /* Size of the icon */
-  color: #ff385c; /* Airbnb-style red */
+  font-size: 32px;
+  color: #ff385c;
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
   justify-content: center;
   align-items: center;
+
+  /* Forces the hover scale/rotation to pivot around the pin's tip */
+  transform-origin: bottom center;
+}
+
+.marker-container i {
+  padding-top: 4px; /* Prevents the top of the pin from getting clipped during scaling */
 }
 
 /* Hover state: Change the icon and color */

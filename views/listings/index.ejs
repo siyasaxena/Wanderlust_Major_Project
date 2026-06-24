@@ -1,4 +1,4 @@
-<% layout("/layouts/boilerplate") -%> <%= success %> 
+<% layout("/layouts/boilerplate") -%>
 <!-- flash msg ka key success hai        -->
 
 <!-- <h3>All Listings</h3> -->
@@ -20,17 +20,20 @@
     justify-content: space-between;
     scroll-behavior: smooth;
     flex-grow: 1; 
-    max-width: 70%;
+    max-width: 60%;
 }
 
 #filters::-webkit-scrollbar {
     display: none;
 }
+.filter{
+    margin-right:40px;
+}
 .right-menu {
     margin-left: auto; 
     display: flex;
     align-items: center;
-    gap: 1rem; /* Space between Filter button and Tax Toggle */
+    gap: 0.5rem; /* Space between Filter button and Tax Toggle */
     padding-left: 20px; /* Buffer so icons don't touch the buttons */
 }
 
@@ -45,6 +48,7 @@
     font-size: 0.85rem;
     white-space: nowrap;
     width: auto;
+    margin-left: 10px;
 }
 .filter-panel {
     cursor: pointer;
@@ -52,6 +56,10 @@
 }
 .tax-info {
     display: none;
+}
+.filter a {
+    color: black;
+    text-decoration: none;
 }
 
     
@@ -64,59 +72,113 @@
 
     <div id="filters">
         <div class="filter">
-            <div class="icon"><i class="fa-solid fa-fire"></i></div>
-            <div class="text">Trending</div>
+            <a class="filter <%= selectedCategory === 'Trending' ? 'active' : '' %>" 
+               href="/listings?category=Trending<%= (typeof currentSort !== 'undefined' && currentSort) ? '&sort=' + currentSort : '' %><%= (typeof currentSearch !== 'undefined' && currentSearch) ? '&search=' + encodeURIComponent(currentSearch) : '' %>">
+                <div><i class="fa-solid fa-fire"></i></div>
+                <p>Trending</p>
+            </a>
         </div>
+
         <div class="filter">
-            <div class="icon"><i class="fa-solid fa-house-chimney"></i></div>
-            <div class="text">Tiny homes</div>
+            <a class="filter <%= selectedCategory === 'Tiny homes' ? 'active' : '' %>" 
+               href="/listings?category=Tiny%20homes<%= (typeof currentSort !== 'undefined' && currentSort) ? '&sort=' + currentSort : '' %><%= (typeof currentSearch !== 'undefined' && currentSearch) ? '&search=' + encodeURIComponent(currentSearch) : '' %>">
+                <div><i class="fa-solid fa-house-chimney-window"></i></div>
+                <p>Tiny homes</p>
+            </a>
         </div>
+
         <div class="filter">
-            <div class="icon"><i class="fa-solid fa-water"></i></div>
-            <div class="text">Lakefront</div>
+            <a class="filter <%= selectedCategory === 'Lakefront' ? 'active' : '' %>" 
+               href="/listings?category=Lakefront<%= (typeof currentSort !== 'undefined' && currentSort) ? '&sort=' + currentSort : '' %><%= (typeof currentSearch !== 'undefined' && currentSearch) ? '&search=' + encodeURIComponent(currentSearch) : '' %>">
+                <div><i class="fa-solid fa-water"></i></div>
+                <p>Lakefront</p>
+            </a>
         </div>
+
         <div class="filter">
-            <div class="icon"><i class="fa-solid fa-cable-car"></i></div>
-            <div class="text">Cabins</div>
+            <a class="filter <%= selectedCategory === 'Cabins' ? 'active' : '' %>" 
+               href="/listings?category=Cabins<%= (typeof currentSort !== 'undefined' && currentSort) ? '&sort=' + currentSort : '' %><%= (typeof currentSearch !== 'undefined' && currentSearch) ? '&search=' + encodeURIComponent(currentSearch) : '' %>">
+                <div><i class="fa-solid fa-cable-car"></i></div> 
+                <p>Cabins</p>
+            </a>
         </div>
+
         <div class="filter">
-            <div class="icon"><i class="fa-solid fa-umbrella-beach"></i></div>
-            <div class="text">Beach</div>
+            <a class="filter <%= selectedCategory === 'Beach' ? 'active' : '' %>" 
+               href="/listings?category=Beach<%= (typeof currentSort !== 'undefined' && currentSort) ? '&sort=' + currentSort : '' %><%= (typeof currentSearch !== 'undefined' && currentSearch) ? '&search=' + encodeURIComponent(currentSearch) : '' %>">
+                <div><i class="fa-solid fa-umbrella-beach"></i></div>
+                <p>Beach</p>
+            </a>
         </div>
+
         <div class="filter">
-            <div class="icon"><i class="fa-solid fa-water-ladder"></i></div>
-            <div class="text">Amazing Pools</div>
+            <a class="filter <%= selectedCategory === 'Amazing Pools' ? 'active' : '' %>" 
+               href="/listings?category=Amazing%20Pools<%= (typeof currentSort !== 'undefined' && currentSort) ? '&sort=' + currentSort : '' %><%= (typeof currentSearch !== 'undefined' && currentSearch) ? '&search=' + encodeURIComponent(currentSearch) : '' %>">
+                <div><i class="fa-solid fa-water-ladder"></i></div>
+                <p>Amazing Pools</p>
+            </a>
         </div>
+
         <div class="filter">
-            <div class="icon"><i class="fa-brands fa-space-awesome"></i></div>
-            <div class="text">OMG!</div>
+            <a class="filter <%= selectedCategory === 'OMG!' ? 'active' : '' %>" 
+               href="/listings?category=OMG!<%= (typeof currentSort !== 'undefined' && currentSort) ? '&sort=' + currentSort : '' %><%= (typeof currentSearch !== 'undefined' && currentSearch) ? '&search=' + encodeURIComponent(currentSearch) : '' %>">
+                <div><i class="fa-brands fa-space-awesome"></i></div>
+                <p>OMG!</p>
+            </a>
         </div>
+
         <div class="filter">
-            <div class="icon"><i class="fa-solid fa-sailboat"></i></div>
-            <div class="text">Surfing</div>
+            <a class="filter <%= selectedCategory === 'Surfing' ? 'active' : '' %>" 
+               href="/listings?category=Surfing<%= (typeof currentSort !== 'undefined' && currentSort) ? '&sort=' + currentSort : '' %><%= (typeof currentSearch !== 'undefined' && currentSearch) ? '&search=' + encodeURIComponent(currentSearch) : '' %>">
+                <div><i class="fa-solid fa-sailboat"></i></div>
+                <p>Surfing</p>
+            </a>
         </div>
+
         <div class="filter">
-            <div class="icon"><i class="fa-solid fa-city"></i></div>
-            <div class="text">Iconic cities</div>
+            <a class="filter <%= selectedCategory === 'Iconic cities' ? 'active' : '' %>" 
+               href="/listings?category=Iconic%20cities<%= (typeof currentSort !== 'undefined' && currentSort) ? '&sort=' + currentSort : '' %><%= (typeof currentSearch !== 'undefined' && currentSearch) ? '&search=' + encodeURIComponent(currentSearch) : '' %>">
+                <div><i class="fa-solid fa-city"></i></div>
+                <p>Iconic cities</p>
+            </a>
         </div>
+
         <div class="filter">
-            <div class="icon"><i class="fa-solid fa-bed"></i></div>
-            <div class="text">Rooms</div>
+            <a class="filter <%= selectedCategory === 'Rooms' ? 'active' : '' %>" 
+               href="/listings?category=Rooms<%= (typeof currentSort !== 'undefined' && currentSort) ? '&sort=' + currentSort : '' %><%= (typeof currentSearch !== 'undefined' && currentSearch) ? '&search=' + encodeURIComponent(currentSearch) : '' %>">
+                <div><i class="fa-solid fa-bed"></i></div>
+                <p>Rooms</p>
+            </a>
         </div>
+
         <div class="filter">
-            <div class="icon"><i class="fa-solid fa-wheat-awn"></i></div>
-            <div class="text">Farms</div>
+            <a class="filter <%= selectedCategory === 'Farms' ? 'active' : '' %>" 
+               href="/listings?category=Farms<%= (typeof currentSort !== 'undefined' && currentSort) ? '&sort=' + currentSort : '' %><%= (typeof currentSearch !== 'undefined' && currentSearch) ? '&search=' + encodeURIComponent(currentSearch) : '' %>">
+                <div><i class="fa-solid fa-wheat-awn"></i></div>
+                <p>Farms</p>
+            </a>
         </div>
+
         <div class="filter">
-            <div class="icon"><i class="fa-solid fa-campground"></i></div>
-            <div class="text">Camping</div>
-        </div>
+            <a class="filter <%= selectedCategory === 'Camping' ? 'active' : '' %>" 
+               href="/listings?category=Camping<%= (typeof currentSort !== 'undefined' && currentSort) ? '&sort=' + currentSort : '' %><%= (typeof currentSearch !== 'undefined' && currentSearch) ? '&search=' + encodeURIComponent(currentSearch) : '' %>">
+                <div><i class="fa-solid fa-campground"></i></div>
+                <p>Camping</p>
+            </a>
+        </div> 
     </div>
+
     <button id="next-btn" onclick="scrollFilters('right')">
         <i class="fa-solid fa-chevron-right"></i>
     </button>
 
     <div class="right-menu">
+        <% if (typeof selectedCategory !== 'undefined' && selectedCategory) { %>
+            <a href="/listings?<%= (typeof currentSort !== 'undefined' && currentSort) ? 'sort=' + currentSort : '' %><%= (typeof currentSearch !== 'undefined' && currentSearch) ? '&search=' + encodeURIComponent(currentSearch) : '' %>" class="btn btn-sm btn-outline-danger me-2">
+                <i class="fa-solid fa-xmark"></i> Clear Category
+            </a>
+        <% } %>
+
         <div class="filter-panel">
             <div class="dropdown">
                 <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
@@ -124,16 +186,18 @@
                 </button>
         
                 <div class="dropdown-menu p-2" aria-labelledby="filterDropdown">
-                    <a class="dropdown-item <%= currentSort === 'asc' ? 'active' : '' %>" href="/listings?sort=asc">
+                    <a class="dropdown-item <%= (typeof currentSort !== 'undefined' && currentSort === 'asc') ? 'active' : '' %>" 
+                       href="/listings?sort=asc<%= (typeof selectedCategory !== 'undefined' && selectedCategory) ? '&category=' + encodeURIComponent(selectedCategory) : '' %><%= (typeof currentSearch !== 'undefined' && currentSearch) ? '&search=' + encodeURIComponent(currentSearch) : '' %>">
                         <i class="fa-solid fa-arrow-up-short-wide me-2"></i> Min price to Max price
                     </a>
-                    <a class="dropdown-item <%= currentSort === 'desc' ? 'active' : '' %>" href="/listings?sort=desc">
+                    <a class="dropdown-item <%= (typeof currentSort !== 'undefined' && currentSort === 'desc') ? 'active' : '' %>" 
+                       href="/listings?sort=desc<%= (typeof selectedCategory !== 'undefined' && selectedCategory) ? '&category=' + encodeURIComponent(selectedCategory) : '' %><%= (typeof currentSearch !== 'undefined' && currentSearch) ? '&search=' + encodeURIComponent(currentSearch) : '' %>">
                         <i class="fa-solid fa-arrow-down-wide-short me-2"></i> Max price to Min price
                     </a>
-                    <% if (currentSort || currentSearch) { %>
+                    <% if ((typeof currentSort !== 'undefined' && currentSort) || (typeof currentSearch !== 'undefined' && currentSearch) || (typeof selectedCategory !== 'undefined' && selectedCategory)) { %>
                         <li><hr class="dropdown-divider"></li>
                         <a class="dropdown-item text-danger" href="/listings">
-                            <i class="fa-solid fa-xmark me-2"></i> Clear Filter
+                            <i class="fa-solid fa-rotate me-2"></i> Reset All
                         </a>
                     <% } %>
                 </div>
@@ -169,9 +233,8 @@
                     <div class="card-body">
                         <p class="card-text">
                             <%= listing.title %><br>
-                            &#8377; <%= listing.price.toLocaleString("en-IN") %> / night
-                            <i class="tax-info">
-                                &nbsp; &nbsp; +<%= listing.gst || 18 %>% GST</i>
+                            &#8377; <%= (listing.price || 0).toLocaleString("en-IN") %> / night
+                            <i class="tax-info">&nbsp; &nbsp; +<%= listing.gst || 18 %>% GST</i>
                         </p>
                     </div>
                 </div>
@@ -183,14 +246,15 @@
 
 <script>
     let taxSwitch = document.getElementById("switchCheckDefault");
-    taxSwitch.addEventListener("click",()=>{
-        let taxInfo = document.getElementsByClassName("tax-info")
-        for(let info of taxInfo){
-            if(info.style.display !=inline){
+    
+    taxSwitch.addEventListener("change", function() {
+        let taxInfo = document.getElementsByClassName("tax-info");
+        for (let info of taxInfo) {
+            if (this.checked) {
                 info.style.display = "inline";
-            }else{
+            } else {
                 info.style.display = "none";
             }
         }
-    })
+    });
 </script>

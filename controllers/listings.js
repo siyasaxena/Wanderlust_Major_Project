@@ -5,7 +5,7 @@ maptilerClient.config.apiKey = process.env.MAP_TOKEN;
 
 module.exports.index = async (req, res) => {
   try {
-    let { search, sort } = req.query; // दोनों query parameters को एक साथ निकाला
+    let { search, sort, category } = req.query; // दोनों query parameters को एक साथ निकाला
     let filterQuery = {}; // डिफ़ॉल्ट खाली ऑब्जेक्ट (यानी सब कुछ ढूंढो)
     let sortOption = {};
 
@@ -18,6 +18,11 @@ module.exports.index = async (req, res) => {
           { country: { $regex: search, $options: "i" } },
         ],
       };
+    }
+
+    // 3. Category Logic: Agar URL mein category aayi hai toh use query mein add karein
+    if (category && category.trim().length > 0) {
+      filterQuery.category = category;
     }
 
     // 2. Sorting Logic: अगर यूजर ने High to Low या Low to High चुना है
@@ -36,6 +41,7 @@ module.exports.index = async (req, res) => {
       allListings,
       currentSort: sort || "",
       currentSearch: search || "",
+      selectedCategory: category || null,
     });
   } catch (err) {
     console.error(err);

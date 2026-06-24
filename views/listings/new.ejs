@@ -64,12 +64,24 @@
           <label for="gst" class="form-label">GST</label>
           <input
             name="listing[gst]"
-            placeholder="1200"
+            placeholder="<100"
             class="form-control"
             required
           />
           <div class="invalid-feedback">
             Please provide a valid GST in format.
+          </div>
+        </div>
+        <div class="mb-3 col-md-8">
+          <label for="category" class="form-label">Category</label>
+          <input
+            name="listing[category]"
+            placeholder="category"
+            class="form-control"
+            required
+          />
+          <div class="invalid-feedback">
+            Please provide a category for your listing.
           </div>
         </div>
       </div>
