@@ -3,7 +3,7 @@ const maptilerClient = require("@maptiler/client");
 
 maptilerClient.config.apiKey = process.env.MAP_TOKEN;
 
-module.exports.index = async (req, res) => {
+module.exports.index = async (req, res, next) => {
   try {
     let { search, sort, category } = req.query; // दोनों query parameters को एक साथ निकाला
     let filterQuery = {}; // डिफ़ॉल्ट खाली ऑब्जेक्ट (यानी सब कुछ ढूंढो)
@@ -44,9 +44,9 @@ module.exports.index = async (req, res) => {
       selectedCategory: category || null,
     });
   } catch (err) {
-    console.error(err);
+    console.error("Index Controller Error:", err);
     req.flash("error", "Something went wrong while fetching listings.");
-    res.redirect("/");
+    next(err);
   }
 };
 module.exports.renderNewForm = (req, res) => {

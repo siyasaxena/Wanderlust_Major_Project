@@ -12,6 +12,8 @@ const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError.js");
 
 const session = require("express-session");
+const { MongoStore } = require("connect-mongo");
+
 const flash = require("connect-flash");
 const passport = require("passport");
 const localStrategy = require("passport-local");
@@ -21,7 +23,8 @@ const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
 
-const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
+//const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
+const dbUrl = process.env.ATLASDB_URL;
 
 main()
   .then(() => {
@@ -32,7 +35,7 @@ main()
   });
 
 async function main() {
-  await mongoose.connect(MONGO_URL);
+  await mongoose.connect(dbUrl);
 }
 
 app.set("view engine", "ejs");
@@ -43,7 +46,19 @@ app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "/public"))); //it is written to use static files of public folder
 
+const store = MongoStore.create({
+  mongoUrl: dbUrl,
+  crypto: {
+    secret: "mysupersecretcode",
+  },
+  touchAfter: 24 * 3600, // in seconds
+});
+
+store.on("error", (err) => {
+  console.log("ERROR in MONGO SESSION STORE", err);
+});
 const sessionOptions = {
+  store: store,
   secret: "my supersecretcode",
   resave: false,
   saveUninitialized: true,
@@ -54,9 +69,10 @@ const sessionOptions = {
   },
 };
 
-// app.get("/",(req,res)=>{
-//     res.send("Hi, I am root");
-// })
+app.get("/", (req, res) => {
+  res.send("Hi, I am root");
+});
+
 app.use(session(sessionOptions));
 app.use(flash());
 app.use(passport.initialize());
@@ -86,7 +102,6 @@ app.use((req, res, next) => {
 //express router
 app.use("/listings", listingRouter);
 app.use("/listings/:id/review", reviewRouter);
-app.use("/", userRouter);
 
 app.get("/privacy", (req, res) => {
   res.render("listings/privacy.ejs");
@@ -99,6 +114,8 @@ app.get("/terms", (req, res) => {
 app.get("/companyDetails", (req, res) => {
   res.render("listings/company-details.ejs");
 });
+
+app.use("/", userRouter);
 
 app.all(/(.*)/, (req, res, next) => {
   next(new ExpressError(404, "Page not found!"));
